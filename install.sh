@@ -38,9 +38,10 @@ while getopts "l:a:b:c:d:e:f:g:h:i:j:" opt; do
 done
 
 # Variables
-db2InstallKitName=v11.5_linuxx64_dec.tar.gz
-db2serverRspFileName=db2server.rsp
 dbGroupName="$dbUserName"grp
+db2InstallKitName=v11.5_linuxx64_dec.tar.gz
+db2serverRspFileLocation=https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/db2server.rsp
+db2serverRspFileName=db2server.rsp
 
 # Install package dependencies of IBM DB2
 dpkg --add-architecture i386
@@ -52,7 +53,7 @@ wget -O "$db2InstallKitName" "$db2InstallKitLocation"
 tar -xf v11.5_linuxx64_dec.tar.gz
 
 # Get DB2 server response file template & replace placeholder strings with user-input parameters
-wget https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/"$db2serverRspFileName"
+wget -O "$db2serverRspFileName" "$db2serverRspFileLocation"
 sed -i "s/DB2_INST_NAME/${instName}/g" "$db2serverRspFileName"
 sed -i "s/DB2_INST_GROUP_NAME/${instGroupName}/g" "$db2serverRspFileName"
 sed -i "s/DB2_INST_PASSWORD/${instPwd}/g" "$db2serverRspFileName"
