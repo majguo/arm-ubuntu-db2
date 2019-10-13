@@ -1,43 +1,18 @@
 #!/bin/sh
-while getopts "l:a:b:c:d:e:f:g:h:i:j:" opt; do
-    case $opt in
-        l)
-            db2InstallKitLocation=$OPTARG #SAS URI of the IBM DB2 install kit in Azure Storage
-        ;;
-        a)
-            instName=$OPTARG #Instance name of IBM DB2 Server
-        ;;
-        b)
-            instGroupName=$OPTARG #Instance group name of IBM DB2 Server
-        ;;
-        c)
-            instPwd=$OPTARG #Instance password of IBM DB2 Server
-        ;;
-        d)
-            fencedName=$OPTARG #Fenced user name of IBM DB2 Server
-        ;;
-        e)
-            fencedGroupName=$OPTARG #Fenced user group name of IBM DB2 Server
-        ;;
-        f)
-            fencedPwd=$OPTARG #Fenced user password of IBM DB2 Server
-        ;;
-        g)
-            dbName=$OPTARG #Database name of IBM DB2 Server
-        ;;
-        h)
-            dbAlias=$OPTARG #Database alias of IBM DB2 Server
-        ;;
-        i)
-            dbUserName=$OPTARG #Database user name of IBM DB2 Server
-        ;;
-        j)
-            dbUserPwd=$OPTARG #Database user password of IBM DB2 Server
-        ;;
-    esac
-done
+# Parameters
+db2InstallKitLocation=$1 #SAS URI of the IBM DB2 install kit in Azure Storage
+instName=$2 #Instance name of IBM DB2 Server
+instPwd=$3 #Instance password of IBM DB2 Server
+fencedName=$4 #Fenced user name of IBM DB2 Server
+fencedPwd=$5 #Fenced user password of IBM DB2 Server
+dbName=$6 #Database name of IBM DB2 Server
+dbUserName=$7 #Database user name of IBM DB2 Server
+dbUserPwd=$8 #Database user password of IBM DB2 Server
 
 # Variables
+instGroupName="$instName"grp
+fencedGroupName="$fencedName"grp
+dbAlias="$dbName"
 dbGroupName="$dbUserName"grp
 db2InstallKitName=v11.5_linuxx64_dec.tar.gz
 db2serverRspFileLocation=https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/db2server.rsp
