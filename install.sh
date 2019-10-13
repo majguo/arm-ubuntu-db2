@@ -1,17 +1,17 @@
 #!/bin/sh
 # Parameters
 db2InstallKitLocation=$1 #SAS URI of the IBM DB2 install kit in Azure Storage
-instName=$2 #Instance name of IBM DB2 Server
-instPwd=$3 #Instance password of IBM DB2 Server
-fencedName=$4 #Fenced user name of IBM DB2 Server
-fencedPwd=$5 #Fenced user password of IBM DB2 Server
-dbName=$6 #Database name of IBM DB2 Server
-dbUserName=$7 #Database user name of IBM DB2 Server
-dbUserPwd=$8 #Database user password of IBM DB2 Server
+instName=$2 #Instance name of IBM DB2 Server, up to 8 characters
+instGroupName=$3 #Instance group name of IBM DB2 Server, up to 8 characters
+instPwd=$4 #Instance password of IBM DB2 Server
+fencedName=$5 #Fenced user name of IBM DB2 Server, up to 8 characters
+fencedGroupName=$6 #Fenced user group name of IBM DB2 Server, up to 8 characters
+fencedPwd=$7 #Fenced user password of IBM DB2 Server
+dbName=$8 #Database name of IBM DB2 Server
+dbUserName=$9 #Database user name of IBM DB2 Server
+dbUserPwd=$10 #Database user password of IBM DB2 Server
 
 # Variables
-instGroupName="$instName"grp
-fencedGroupName="$fencedName"grp
 dbAlias="$dbName"
 dbGroupName="$dbUserName"grp
 db2InstallKitName=v11.5_linuxx64_dec.tar.gz
