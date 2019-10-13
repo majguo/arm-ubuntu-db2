@@ -18,14 +18,14 @@ db2InstallKitName=v11.5_linuxx64_dec.tar.gz
 db2serverRspFileLocation=https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/db2server.rsp
 db2serverRspFileName=db2server.rsp
 
-# Install package dependencies of IBM DB2
+# Install package dependencies of IBM DB2 Server
 dpkg --add-architecture i386
 apt-get update
 apt-get install libx32stdc++6 --yes && apt-get install libpam0g:i386 --yes && apt-get install libaio1 --yes
 
 # Get DB2 Installation Kit
 wget -O "$db2InstallKitName" "$db2InstallKitLocation"
-tar -xf v11.5_linuxx64_dec.tar.gz
+tar -xf "$db2InstallKitName"
 
 # Get DB2 server response file template & replace placeholder strings with user-input parameters
 wget -O "$db2serverRspFileName" "$db2serverRspFileLocation"
@@ -46,4 +46,4 @@ groupadd -g 998 "$fencedGroupName" && useradd -p $(openssl passwd -1 "$fencedPwd
 groupadd -g 999 "$dbGroupName" && useradd -p $(openssl passwd -1 "$dbUserPwd") -u 1004 -g "$dbGroupName" -m -d /home/"$dbUserName" "$dbUserName"
 
 # Install IBM DB2 Server using response file
-./server_dec/db2setup -r db2server.rsp -l log.txt
+./server_dec/db2setup -r "$db2serverRspFileName" -l log.txt
