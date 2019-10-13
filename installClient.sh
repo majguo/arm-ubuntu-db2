@@ -38,8 +38,6 @@ sed -i "s/DB2_INST_PASSWORD/${instPwd}/g" "$db2clientRspFileName"
 
 # Create group and user for instance owner
 groupadd -g 997 "$instGroupName" && useradd -p $(openssl passwd -1 "$instPwd") -u 1002 -g "$instGroupName" -m -d /home/"$instName" "$instName"
-groupadd -g 998 "$fencedGroupName" && useradd -p $(openssl passwd -1 "$fencedPwd") -u 1003 -g "$fencedGroupName" -m -d /home/"$fencedName" "$fencedName"
-groupadd -g 999 "$dbGroupName" && useradd -p $(openssl passwd -1 "$dbUserPwd") -u 1004 -g "$dbGroupName" -m -d /home/"$dbUserName" "$dbUserName"
 
 # Install IBM DB2 Data Server Client using response file
 ./client/db2setup -r "$db2clientRspFileName" -l log.txt
