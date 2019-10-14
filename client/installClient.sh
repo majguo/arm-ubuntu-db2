@@ -24,7 +24,7 @@ db2clientRspFileName=db2client.rsp
 # Install package dependencies of IBM DB2 Data Server Client
 dpkg --add-architecture i386
 apt-get update
-apt-get install libx32stdc++6 --yes && apt-get install libpam0g:i386 --yes && apt-get install libaio1 --yes && apt-get install binutils
+apt-get install libx32stdc++6 --yes && apt-get install libpam0g:i386 --yes && apt-get install libaio1 --yes && apt-get install binutils --yes
 
 # Get DB2 Data Server Client Installation Kit
 wget -O "$db2InstallKitName" "$db2InstallKitLocation"
