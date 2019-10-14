@@ -18,7 +18,7 @@ done
 
 # Variables
 db2InstallKitName=ibm_data_server_client_linuxx64_v11.5.tar.gz
-db2clientRspFileLocation=https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/db2client.rsp
+db2clientRspFileLocation=https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/client/db2client.rsp
 db2clientRspFileName=db2client.rsp
 
 # Install package dependencies of IBM DB2 Data Server Client
