@@ -1,0 +1,257 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "instName": {
+            "type": "string"
+        },
+        "instGroupName": {
+            "type": "string"
+        },
+        "instPwd": {
+            "type": "securestring"
+        },
+        "fencedName": {
+            "type": "string"
+        },
+        "fencedGroupName": {
+            "type": "string"
+        },
+        "fencedPwd": {
+            "type": "securestring"
+        },
+        "dbName": {
+            "type": "string"
+        },
+        "dbUserName": {
+            "type": "string"
+        },
+        "dbUserPwd": {
+            "type": "securestring"
+        },
+        "vmAdminId": {
+            "type": "string"
+        },
+        "vmAdminPwd": {
+            "type": "securestring"
+        },
+        "vmSize": {
+            "defaultValue": "Standard_D2s_v3",
+            "type": "string"
+        },
+        "imInstallerLocation": {
+            "type": "string"
+        },
+        "virtualMachineNamePrefix": {
+            "defaultValue": "vm-",
+            "type": "string"
+        },
+        "virtualNetworkName": {
+            "defaultValue": "[concat('vnet-', uniqueString(resourceGroup().id))]",
+            "type": "string"
+        },
+        "addressPrefix": {
+            "defaultValue": "172.16.3.0/24",
+            "type": "string"
+        },
+        "subnetName": {
+            "defaultValue": "default",
+            "type": "string"
+        },
+        "subnetAddressPrefix": {
+            "defaultValue": "172.16.3.0/24",
+            "type": "string"
+        },
+        "networkSecurityGroupName": {
+            "defaultValue": "[concat('nsg-', uniqueString(resourceGroup().id))]",
+            "type": "string"
+        }
+    },
+    "variables": {
+        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), uniqueString(resourceGroup().id))]",
+        "networkInterfaceName": "[concat(variables('virtualMachineName'), '-if')]",
+        "publicIPAddressName": "[concat(variables('virtualMachineName'), '-ip')]",
+        "diskName": "[concat(variables('virtualMachineName'), '-disk')]",
+        "publicIPAddressRef": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
+        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+        "networkSecurityGroupRef": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
+        "networkInterfaceRef": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
+        "virtualNetworkRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "virtualMachineRef": "[resourceId('Microsoft.Compute/virtualMachines', variables('virtualMachineName'))]",
+        "commandToExecute": "[concat('sh install.sh',' \"',parameters('imInstallerLocation'),'\" ',parameters('instName'),' ',parameters('instGroupName'),' ',parameters('instPwd'),' ',parameters('fencedName'),' ',parameters('fencedGroupName'),' ',parameters('fencedPwd'),' ',parameters('dbName'),' ',parameters('dbUserName'),' ',parameters('dbUserPwd'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('networkSecurityGroupName')]",
+            "location": "eastus",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('publicIPAddressName')]",
+            "location": "eastus",
+            "sku": {
+                "name": "Basic",
+                "tier": "Regional"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-06-01",
+            "name": "[parameters('virtualNetworkName')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[variables('networkSecurityGroupRef')]"
+            ],
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('addressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnetAddressPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[variables('networkSecurityGroupRef')]"
+                            }
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-03-01",
+            "name": "[concat(variables('virtualMachineName'), '/CustomScript')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[variables('virtualMachineRef')]"
+            ],
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.0",
+                "settings": {
+                    "fileUris": [
+                        "https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/install.sh"
+                    ],
+                    "commandToExecute": "[variables('commandToExecute')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2019-06-01",
+            "name": "[concat(parameters('virtualNetworkName'), '/', parameters('subnetName'))]",
+            "dependsOn": [
+                "[variables('virtualNetworkRef')]",
+                "[variables('networkSecurityGroupRef')]"
+            ],
+            "properties": {
+                "addressPrefix": "[parameters('subnetAddressPrefix')]",
+                "networkSecurityGroup": {
+                    "id": "[variables('networkSecurityGroupRef')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2019-03-01",
+            "name": "[variables('virtualMachineName')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[variables('networkInterfaceRef')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "16.04-LTS",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "osType": "Linux",
+                        "name": "[variables('diskName')]",
+                        "createOption": "FromImage",
+                        "caching": "ReadWrite",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        },
+                        "diskSizeGB": 30
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[variables('virtualMachineName')]",
+                    "adminUsername": "[parameters('vmAdminId')]",
+                    "adminPassword": "[parameters('vmAdminPwd')]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": false,
+                        "provisionVMAgent": true
+                    },
+                    "secrets": [],
+                    "allowExtensionOperations": true
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[variables('networkInterfaceRef')]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2019-06-01",
+            "name": "[variables('networkInterfaceName')]",
+            "location": "eastus",
+            "dependsOn": [
+                "[variables('publicIPAddressRef')]",
+                "[variables('subnetRef')]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[variables('publicIPAddressRef')]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "primary": true,
+                "tapConfigurations": []
+            }
+        }
+    ]
+}
