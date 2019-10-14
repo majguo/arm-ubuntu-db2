@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "instName": {
+            "value": "GEN-UNIQUE"
+        },
+        "instGroupName": {
+            "value": "GEN-UNIQUE"
+        },
+        "instPwd": {
+            "value": "GEN-UNIQUE"
+        },
+        "fencedName": {
+            "value": "GEN-UNIQUE"
+        },
+        "fencedGroupName": {
+            "value": "GEN-UNIQUE"
+        },
+        "fencedPwd": {
+            "value": "GEN-UNIQUE"
+        },
+        "dbName": {
+            "value": "GEN-UNIQUE"
+        },
+        "dbUserName": {
+            "value": "GEN-UNIQUE"
+        },
+        "dbUserPwd": {
+            "value": "GEN-UNIQUE"
+        },
+        "vmAdminId": {
+            "value": "GEN-UNIQUE"
+        },
+        "vmAdminPwd": {
+            "value": "GEN-UNIQUE"
+        },
+        "virtualMachineNamePrefix": {
+            "value": "db2server-vm-"
+        }
+    }
+}
