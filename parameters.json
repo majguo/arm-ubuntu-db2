@@ -35,8 +35,20 @@
         "vmAdminPwd": {
             "value": "GEN-UNIQUE"
         },
-        "virtualMachineNamePrefix": {
-            "value": "db2server-vm-"
+        "virtualMachineName": {
+            "value": "rgName-db2server-vm"
+        },
+        "virtualNetworkName": {
+            "value": "rgName-vnet"
+        },
+        "addressPrefix": {
+            "value": "10.0.0.0/16"
+        },
+        "subnetName": {
+            "value": "subnet02"
+        },
+        "subnetAddressPrefix": {
+            "value": "10.0.2.0/24"
         }
     }
 }

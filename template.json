@@ -2,6 +2,9 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "installKitUri": {
+            "type": "string"
+        },
         "instName": {
             "type": "string"
         },
@@ -35,50 +38,51 @@
         "vmAdminPwd": {
             "type": "securestring"
         },
+        "virtualMachineName": {
+            "defaultValue": "[concat(resourceGroup().name,'-db2server-vm')]",
+            "type": "string"
+        },
         "vmSize": {
             "defaultValue": "Standard_D2s_v3",
             "type": "string"
         },
-        "imInstallerLocation": {
-            "type": "string"
-        },
-        "virtualMachineNamePrefix": {
-            "defaultValue": "vm-",
-            "type": "string"
-        },
         "virtualNetworkName": {
-            "defaultValue": "[concat('vnet-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat(resourceGroup().name,'-vnet')]",
             "type": "string"
         },
         "addressPrefix": {
-            "defaultValue": "172.16.3.0/24",
+            "defaultValue": "10.0.0.0/16",
             "type": "string"
         },
         "subnetName": {
-            "defaultValue": "default",
+            "defaultValue": "subnet02",
             "type": "string"
         },
         "subnetAddressPrefix": {
-            "defaultValue": "172.16.3.0/24",
+            "defaultValue": "10.0.2.0/24",
             "type": "string"
         },
+        "virtualNetworkExisted": {
+            "defaultValue": false,
+            "type": "bool"
+        },
         "networkSecurityGroupName": {
-            "defaultValue": "[concat('nsg-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat(resourceGroup().name,'-',parameters('subnetName'),'-nsg')]",
             "type": "string"
         }
     },
     "variables": {
-        "virtualMachineName": "[concat(parameters('virtualMachineNamePrefix'), uniqueString(resourceGroup().id))]",
-        "networkInterfaceName": "[concat(variables('virtualMachineName'), '-if')]",
-        "publicIPAddressName": "[concat(variables('virtualMachineName'), '-ip')]",
-        "diskName": "[concat(variables('virtualMachineName'), '-disk')]",
+        "networkInterfaceName": "[concat(parameters('virtualMachineName'), '-if')]",
+        "publicIPAddressName": "[concat(parameters('virtualMachineName'), '-ip')]",
+        "diskName": "[concat(parameters('virtualMachineName'), '-disk')]",
         "publicIPAddressRef": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]",
         "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
         "networkSecurityGroupRef": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]",
         "networkInterfaceRef": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]",
         "virtualNetworkRef": "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "virtualMachineRef": "[resourceId('Microsoft.Compute/virtualMachines', variables('virtualMachineName'))]",
-        "commandToExecute": "[concat('sh install.sh',' \"',parameters('imInstallerLocation'),'\" ',parameters('instName'),' ',parameters('instGroupName'),' ',parameters('instPwd'),' ',parameters('fencedName'),' ',parameters('fencedGroupName'),' ',parameters('fencedPwd'),' ',parameters('dbName'),' ',parameters('dbUserName'),' ',parameters('dbUserPwd'))]"
+        "virtualMachineRef": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachineName'))]",
+        "fileUri": "https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/install.sh",
+        "commandToExecute": "[concat('sh install.sh',' \"',parameters('installKitUri'),'\" ',parameters('instName'),' ',parameters('instGroupName'),' ',parameters('instPwd'),' ',parameters('fencedName'),' ',parameters('fencedGroupName'),' ',parameters('fencedPwd'),' ',parameters('dbName'),' ',parameters('dbUserName'),' ',parameters('dbUserPwd'))]"
     },
     "resources": [
         {
@@ -108,6 +112,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-06-01",
             "name": "[parameters('virtualNetworkName')]",
+            "condition": "[not(parameters('virtualNetworkExisted'))]",
             "location": "eastus",
             "dependsOn": [
                 "[variables('networkSecurityGroupRef')]"
@@ -118,17 +123,6 @@
                         "[parameters('addressPrefix')]"
                     ]
                 },
-                "subnets": [
-                    {
-                        "name": "[parameters('subnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('subnetAddressPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[variables('networkSecurityGroupRef')]"
-                            }
-                        }
-                    }
-                ],
                 "virtualNetworkPeerings": [],
                 "enableDdosProtection": false,
                 "enableVmProtection": false
@@ -137,7 +131,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-03-01",
-            "name": "[concat(variables('virtualMachineName'), '/CustomScript')]",
+            "name": "[concat(parameters('virtualMachineName'), '/CustomScript')]",
             "location": "eastus",
             "dependsOn": [
                 "[variables('virtualMachineRef')]"
@@ -149,7 +143,7 @@
                 "typeHandlerVersion": "2.0",
                 "settings": {
                     "fileUris": [
-                        "https://raw.githubusercontent.com/majguo/arm-ubuntu-db2/master/install.sh"
+                        "[variables('fileUri')]"
                     ],
                     "commandToExecute": "[variables('commandToExecute')]"
                 }
@@ -173,7 +167,7 @@
         {
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2019-03-01",
-            "name": "[variables('virtualMachineName')]",
+            "name": "[parameters('virtualMachineName')]",
             "location": "eastus",
             "dependsOn": [
                 "[variables('networkInterfaceRef')]"
@@ -186,7 +180,7 @@
                     "imageReference": {
                         "publisher": "Canonical",
                         "offer": "UbuntuServer",
-                        "sku": "16.04-LTS",
+                        "sku": "18.04-LTS",
                         "version": "latest"
                     },
                     "osDisk": {
@@ -202,7 +196,7 @@
                     "dataDisks": []
                 },
                 "osProfile": {
-                    "computerName": "[variables('virtualMachineName')]",
+                    "computerName": "[parameters('virtualMachineName')]",
                     "adminUsername": "[parameters('vmAdminId')]",
                     "adminPassword": "[parameters('vmAdminPwd')]",
                     "linuxConfiguration": {
