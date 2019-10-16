@@ -20,4 +20,7 @@
 
 ## After deployment
 - If you check the resource group in [azure portal](https://portal.azure.com/), you will see related resources created
-- If you have one IBM DB2 Data Server Client installed on virtual machine in the same virtual network, open VM resource blade and copy its private IP address, then catalog server node & database using db2 command to [test the connectivity to database](https://www.ibm.com/support/knowledgecenter/en/SSEPGG_11.5.0/com.ibm.swg.im.dbclient.install.doc/doc/t0070357.html)
+- If you have one IBM DB2 Data Server Client installed on virtual machine in the same virtual network, open VM resource blade and copy its private IP address, then catalog server node & database to [test the connectivity to database](https://www.ibm.com/support/knowledgecenter/en/SSEPGG_11.5.0/com.ibm.swg.im.dbclient.install.doc/doc/t0070357.html). To install IBM DB2 Data Server Client, first download it from [IBM website](https://www-01.ibm.com/marketing/iwm/iwm/web/download.do?source=swg-idsc97&transactionid=456003434&pageType=urx&S_PKG=linuxamd) with IBM id and upload to secure cloud storage (e.g., [Azure Storage](https://azure.microsoft.com/en-us/services/storage/)), then locate to [client](https://github.com/majguo/arm-ubuntu-db2/tree/master/client) directory and run the following commands to install on Ubuntu 18.04 LTS server:
+    ```
+    installClient.sh -l <cloudStorageUriToInstallKit> -u <db2InstanceOwnerName> -g <db2InstanceOwerGroup> -p <db2InstanceOwnerPassword>
+    ```

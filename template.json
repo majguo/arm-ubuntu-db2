@@ -6,19 +6,31 @@
             "type": "string"
         },
         "instName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+				"description": "up to 8 characters"
+			}
         },
         "instGroupName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+				"description": "up to 8 characters"
+			}
         },
         "instPwd": {
             "type": "securestring"
         },
         "fencedName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+				"description": "up to 8 characters"
+			}
         },
         "fencedGroupName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+				"description": "up to 8 characters"
+			}
         },
         "fencedPwd": {
             "type": "securestring"
