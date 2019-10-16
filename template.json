@@ -8,14 +8,14 @@
         "instName": {
             "type": "string",
             "metadata": {
-				"description": "up to 8 characters"
-			}
+                "description": "up to 8 characters"
+            }
         },
         "instGroupName": {
             "type": "string",
             "metadata": {
-				"description": "up to 8 characters"
-			}
+                "description": "up to 8 characters"
+            }
         },
         "instPwd": {
             "type": "securestring"
@@ -23,14 +23,14 @@
         "fencedName": {
             "type": "string",
             "metadata": {
-				"description": "up to 8 characters"
-			}
+                "description": "up to 8 characters"
+            }
         },
         "fencedGroupName": {
             "type": "string",
             "metadata": {
-				"description": "up to 8 characters"
-			}
+                "description": "up to 8 characters"
+            }
         },
         "fencedPwd": {
             "type": "securestring"
