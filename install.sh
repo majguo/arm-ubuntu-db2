@@ -20,8 +20,9 @@ db2serverRspFileName=db2server.rsp
 
 # Install package dependencies of IBM DB2 Server
 dpkg --add-architecture i386
+echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 apt-get update
-apt-get install libx32stdc++6 --yes && apt-get install libpam0g:i386 --yes && apt-get install libaio1 --yes && apt-get install binutils --yes
+apt-get install libx32stdc++6 -y && apt-get install libpam0g:i386 -y && apt-get install libaio1 -y && apt-get install binutils -y
 
 # Get DB2 Installation Kit
 wget -O "$db2InstallKitName" "$db2InstallKitLocation"
