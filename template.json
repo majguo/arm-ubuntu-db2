@@ -59,19 +59,19 @@
             "type": "string"
         },
         "virtualNetworkName": {
-            "defaultValue": "[concat(resourceGroup().name,'-vnet')]",
+            "defaultValue": "[concat(resourceGroup().name,'-db2server-vnet')]",
             "type": "string"
         },
         "addressPrefix": {
-            "defaultValue": "10.0.0.0/16",
+            "defaultValue": "10.1.0.0/16",
             "type": "string"
         },
         "subnetName": {
-            "defaultValue": "subnet02",
+            "defaultValue": "subnet01",
             "type": "string"
         },
         "subnetAddressPrefix": {
-            "defaultValue": "10.0.2.0/24",
+            "defaultValue": "10.1.1.0/24",
             "type": "string"
         },
         "virtualNetworkExisted": {
@@ -79,7 +79,7 @@
             "type": "bool"
         },
         "networkSecurityGroupName": {
-            "defaultValue": "[concat(resourceGroup().name,'-',parameters('subnetName'),'-nsg')]",
+            "defaultValue": "[concat(resourceGroup().name,'-db2server-nsg')]",
             "type": "string"
         }
     },

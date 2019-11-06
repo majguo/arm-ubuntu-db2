@@ -39,16 +39,16 @@
             "value": "rgName-db2server-vm"
         },
         "virtualNetworkName": {
-            "value": "rgName-vnet"
+            "value": "rgName-db2server-vnet"
         },
         "addressPrefix": {
-            "value": "10.0.0.0/16"
+            "value": "10.1.0.0/16"
         },
         "subnetName": {
-            "value": "subnet02"
+            "value": "subnet01"
         },
         "subnetAddressPrefix": {
-            "value": "10.0.2.0/24"
+            "value": "10.1.1.0/24"
         }
     }
 }
