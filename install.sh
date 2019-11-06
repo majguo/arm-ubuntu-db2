@@ -9,7 +9,7 @@ fencedGroupName=$6 #Fenced user group name of IBM DB2 Server, up to 8 characters
 fencedPwd=$7 #Fenced user password of IBM DB2 Server
 dbName=$8 #Database name of IBM DB2 Server
 dbUserName=$9 #Database user name of IBM DB2 Server
-dbUserPwd=$10 #Database user password of IBM DB2 Server
+dbUserPwd=${10} #Database user password of IBM DB2 Server
 
 # Variables
 dbAlias="$dbName"
