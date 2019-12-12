@@ -49,10 +49,5 @@ groupadd -g 999 "$dbGroupName" && useradd -p $(openssl passwd -1 "$dbUserPwd") -
 # Install IBM DB2 Server using response file
 ./server_dec/db2setup -r "$db2serverRspFileName" -l log.txt
 
-# Install sample database
-echo $( whoami )
-sudo su - "$instName"
-echo $( whoami )
-echo $( whereis db2sampl )
-db2sampl
-exit
+# Install sample database as instance owner
+su "$instName" -c 'db2sampl'
