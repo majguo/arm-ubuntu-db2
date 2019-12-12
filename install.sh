@@ -50,4 +50,4 @@ groupadd -g 999 "$dbGroupName" && useradd -p $(openssl passwd -1 "$dbUserPwd") -
 ./server_dec/db2setup -r "$db2serverRspFileName" -l log.txt
 
 # Install sample database as instance owner
-su "$instName" -c 'db2sampl'
+sudo -i -u "$instName" sh -c 'db2sampl'
