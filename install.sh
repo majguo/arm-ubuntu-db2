@@ -51,7 +51,7 @@ groupadd -g 999 "$dbGroupName" && useradd -p $(openssl passwd -1 "$dbUserPwd") -
 
 # Install sample database
 echo $( whoami )
-su - "$instName"
+sudo su - "$instName"
 echo $( whoami )
 echo $( whereis db2sampl )
 db2sampl
