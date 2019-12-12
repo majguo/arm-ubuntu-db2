@@ -50,6 +50,9 @@ groupadd -g 999 "$dbGroupName" && useradd -p $(openssl passwd -1 "$dbUserPwd") -
 ./server_dec/db2setup -r "$db2serverRspFileName" -l log.txt
 
 # Install sample database
+echo $( whoami )
 su - "$instName"
+echo $( whoami )
+echo $( whereis db2sampl )
 db2sampl
 exit
