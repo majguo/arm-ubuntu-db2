@@ -38,6 +38,9 @@
         "virtualMachineName": {
             "value": "rgName-db2server-vm"
         },
+        "networkSecurityGroupName": {
+            "value": "rgName-db2server-nsg"
+        },
         "virtualNetworkName": {
             "value": "rgName-db2server-vnet"
         },
