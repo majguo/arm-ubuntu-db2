@@ -1,10 +1,11 @@
-# Deploy IBM DB2 Server Edition V11.5.0.0 with Azure ARM template and CLI
+# Deploy a Ubuntu 18.04 LTS VM on Azure with IBM DB2 Server Edition V11.5.0.0 pre-installed
 
 ## Prerequisites
  - Register an [Azure subscription](https://azure.microsoft.com/en-us/)
  - Register an [IBM id](https://idaas.iam.ibm.com/idaas/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:basicldapuser)
  - Download [IBM DB2 Server Edition V11.5 Installation Kit](https://www.ibm.com/account/reg/sg-en/signup?formid=urx-33669)
- - Install [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+ - Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest)
+ - Install [`jq`](https://stedolan.github.io/jq/download/)
 
  ## Before using sample parameters.json
  - Replace "GEN-UNIQUE" with valid user id or password
