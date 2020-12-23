@@ -141,7 +141,7 @@ fi
 storageContainerName=${resourceGroupName}"-stageartifacts"
 storageContainerName=$( echo "$storageContainerName" | awk '{print tolower($0)}')
 storageAccountKey=$( az storage account keys list -g "$resourceGroupName" -n "$storageAccountName" -o json | jq -r '.[0].value' )
-if [[ $( az storage container exists --name "$storageContainerName" --account-name "$storageAccountName" -o json | jq '.exists') = false ]]; then
+if [[ $( az storage container exists --name "$storageContainerName" --account-name "$storageAccountName" --account-key "$storageAccountKey" -o json | jq '.exists') = false ]]; then
 	echo "Storage container with name" $storageContainerName "could not be found. Creating new storage container..."
 	set -e
 	(
@@ -154,7 +154,7 @@ fi
 
 #Upload IBM DB2 Server install kit to storage container
 fileName=$(basename "$installKitFile")
-if [[ $( az storage blob exists -n "$fileName" -c "$storageContainerName" --account-name "$storageAccountName" -o json | jq '.exists') = false ]]; then
+if [[ $( az storage blob exists -n "$fileName" -c "$storageContainerName" --account-name "$storageAccountName" --account-key "$storageAccountKey" -o json | jq '.exists') = false ]]; then
 	echo "Storage blob with name" $fileName "could not be found. Creating new storage blob..."
 	set -e
 	(
@@ -188,7 +188,7 @@ fi
 #Start deployment
 echo "Starting deployment..."
 (
-	az group deployment create --name "$deploymentName" --resource-group "$resourceGroupName" \
+	az deployment group create --name "$deploymentName" --resource-group "$resourceGroupName" \
 		--template-file "$templateFilePath" --parameters "$parametersJson"
 )
 
