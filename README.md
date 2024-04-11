@@ -4,9 +4,9 @@
  - Register an [Azure subscription](https://azure.microsoft.com/en-us/)
  - Register an [IBM id](https://idaas.iam.ibm.com/idaas/mtfim/sps/authsvc?PolicyId=urn:ibm:security:authentication:asf:basicldapuser)
  - Download [IBM DB2 Server Edition V11.5 Installation Kit](https://www.ibm.com/account/reg/sg-en/signup?formid=urx-33669) Alternatively, follow instructions below to download both server and client install kits:
-   - Open [Downloading IBM Db2 Version 11.5 for Linux, UNIX, and Windows](https://www.ibm.com/support/pages/downloading-ibm-db2-version-115-linux-unix-and-windows)
-   - Select [To download Db2 recommended fix packs](https://www.ibm.com/support/pages/node/360045) > select one Fix Pack for DB2
-   - From the page, download **DB2 Server Fix Pack** and **IBM Data Server Client**.
+   - Select [Downloading IBM Db2 Version 11.5 for Linux, UNIX, and Windows](https://www.ibm.com/support/pages/downloading-ibm-db2-version-115-linux-unix-and-windows).
+   - You should find link for [To download Db2 recommended fix packs](https://www.ibm.com/support/pages/node/360045), select it. Then select one Fix Pack for DB2.
+   - From the page, find download link for **DB2 Server Fix Pack** and **IBM Data Server Client**.
  - Install [Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest)
  - Install [`jq`](https://stedolan.github.io/jq/download/)
 
